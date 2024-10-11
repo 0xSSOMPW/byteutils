@@ -3,6 +3,8 @@
 #[path = "./test.rs"]
 mod test;
 
+pub mod string;
+
 /// Converts a byte slice to its hexadecimal string representation.
 ///
 /// This function takes a slice of bytes and returns a String containing the

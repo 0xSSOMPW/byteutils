@@ -1,3 +1,4 @@
+use crate::string::*;
 #[cfg(test)]
 use crate::*;
 
@@ -96,4 +97,64 @@ fn test_roundtrip_conversions() {
     let original_bytes = vec![0xDE, 0xAD, 0xBE, 0xEF];
     let hex = bytes_to_hex(&original_bytes);
     assert_eq!(hex_to_bytes(&hex).unwrap(), original_bytes);
+}
+
+#[test]
+fn test_to_array_basic() {
+    let result = to_array("a,b,c");
+    assert_eq!(result, vec!["a", "b", "c"]);
+}
+
+#[test]
+fn test_to_array_with_spaces() {
+    let result = to_array(" a , b , c ");
+    assert_eq!(result, vec!["a", "b", "c"]);
+}
+
+#[test]
+fn test_to_array_with_empty_elements() {
+    let result = to_array("a,,b,,c");
+    assert_eq!(result, vec!["a", "b", "c"]);
+}
+
+#[test]
+fn test_to_array_with_empty_string() {
+    let result = to_array("");
+    assert_eq!(result, Vec::<String>::new());
+}
+
+#[test]
+fn test_to_array_with_only_commas() {
+    let result = to_array(",,,");
+    assert_eq!(result, Vec::<String>::new());
+}
+
+#[test]
+fn test_to_array_with_whitespace_only_elements() {
+    let result = to_array("a, , ,b,  ,c");
+    assert_eq!(result, vec!["a", "b", "c"]);
+}
+
+#[test]
+fn test_to_array_with_mixed_whitespace() {
+    let result = to_array("a,\tb\n,  c  ");
+    assert_eq!(result, vec!["a", "b", "c"]);
+}
+
+#[test]
+fn test_to_array_single_element() {
+    let result = to_array("hello");
+    assert_eq!(result, vec!["hello"]);
+}
+
+#[test]
+fn test_to_array_preserves_inner_spaces() {
+    let result = to_array("hello world,foo bar,baz");
+    assert_eq!(result, vec!["hello world", "foo bar", "baz"]);
+}
+
+#[test]
+fn test_to_array_with_special_characters() {
+    let result = to_array("hello!,@world,#rust$");
+    assert_eq!(result, vec!["hello!", "@world", "#rust$"]);
 }
