@@ -158,3 +158,28 @@ fn test_to_array_with_special_characters() {
     let result = to_array("hello!,@world,#rust$");
     assert_eq!(result, vec!["hello!", "@world", "#rust$"]);
 }
+
+#[test]
+fn test_escape_sql_basic() {
+    assert_eq!(escape_sql("normal text"), "normal text");
+}
+
+#[test]
+fn test_escape_sql_with_single_quotes() {
+    assert_eq!(escape_sql("O'Connor"), "O''Connor");
+}
+
+#[test]
+fn test_escape_sql_with_backslashes() {
+    assert_eq!(escape_sql("C:\\path"), "C:\\\\path");
+}
+
+#[test]
+fn test_escape_sql_with_both() {
+    assert_eq!(escape_sql("O'Connor\\path"), "O''Connor\\\\path");
+}
+
+#[test]
+fn test_escape_sql_empty_string() {
+    assert_eq!(escape_sql(""), "");
+}

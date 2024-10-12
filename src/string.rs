@@ -27,3 +27,25 @@ pub fn to_array(comma_separated_values: &str) -> Vec<String> {
         .map(String::from)
         .collect()
 }
+
+/// Escapes special characters in a SQL string by replacing backslashes with double backslashes
+/// and single quotes with double single quotes.
+///
+/// # Arguments
+///
+/// * `input` - The string to escape
+///
+/// # Returns
+///
+/// A String with SQL special characters properly escaped
+///
+/// # Example
+///
+/// ```rust
+/// let input = "O'Connor\\Path";
+/// let escaped = byteutils::string::escape_sql(input);
+/// assert_eq!(escaped, "O''Connor\\\\Path");
+/// ```
+pub fn escape_sql(input: &str) -> String {
+    input.replace('\\', "\\\\").replace('\'', "''")
+}
