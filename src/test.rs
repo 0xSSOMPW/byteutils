@@ -183,3 +183,18 @@ fn test_escape_sql_with_both() {
 fn test_escape_sql_empty_string() {
     assert_eq!(escape_sql(""), "");
 }
+
+#[test]
+fn test_enclose_quotes_basic() {
+    assert_eq!(enclose_quotes("name"), "'name'");
+}
+
+#[test]
+fn test_enclose_quotes_empty_string() {
+    assert_eq!(enclose_quotes(""), "''");
+}
+
+#[test]
+fn test_enclose_quotes_with_spaces() {
+    assert_eq!(enclose_quotes("table name"), "'table name'");
+}

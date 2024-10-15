@@ -49,3 +49,24 @@ pub fn to_array(comma_separated_values: &str) -> Vec<String> {
 pub fn escape_sql(input: &str) -> String {
     input.replace('\\', "\\\\").replace('\'', "''")
 }
+
+/// Encloses a string in single quotes for SQL string literals.
+///
+/// # Arguments
+///
+/// * `name` - The string to enclose in quotes
+///
+/// # Returns
+///
+/// A String wrapped in single quotes
+///
+/// # Example
+///
+/// ```rust
+/// let name = "table_name";
+/// let quoted = byteutils::string::enclose_quotes(name);
+/// assert_eq!(quoted, "'table_name'");
+/// ```
+pub fn enclose_quotes(name: &str) -> String {
+    format!("'{}'", name)
+}
