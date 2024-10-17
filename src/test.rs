@@ -198,3 +198,23 @@ fn test_enclose_quotes_empty_string() {
 fn test_enclose_quotes_with_spaces() {
     assert_eq!(enclose_quotes("table name"), "'table name'");
 }
+
+#[test]
+fn test_is_contain_word() {
+    assert!(is_contain_word("Hello world", "world"));
+    assert!(is_contain_word("The quick brown fox", "quick"));
+    assert!(!is_contain_word("Hello world", "worl"));
+    assert!(!is_contain_word("HelloWorld", "World"));
+}
+
+#[test]
+fn test_has_contain_words() {
+    let words = vec![
+        "apple".to_string(),
+        "banana".to_string(),
+        "cherry".to_string(),
+    ];
+    assert!(has_contain_words("I like apple pie", &words));
+    assert!(has_contain_words("Banana split is delicious", &words));
+    assert!(!has_contain_words("I love peaches and pears", &words));
+}
