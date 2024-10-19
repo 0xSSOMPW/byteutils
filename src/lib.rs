@@ -4,6 +4,7 @@
 mod test;
 
 pub mod string;
+pub mod vec;
 
 /// Converts a byte slice to its hexadecimal string representation.
 ///

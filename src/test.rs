@@ -1,4 +1,5 @@
 use crate::string::*;
+use crate::vec::*;
 #[cfg(test)]
 use crate::*;
 
@@ -217,4 +218,39 @@ fn test_has_contain_words() {
     assert!(has_contain_words("I like apple pie", &words));
     assert!(has_contain_words("Banana split is delicious", &words));
     assert!(!has_contain_words("I love peaches and pears", &words));
+}
+
+#[test]
+fn test_dedup_integers() {
+    let mut numbers = vec![1, 2, 3, 2, 4, 1, 5];
+    dedup(&mut numbers);
+    assert_eq!(numbers, vec![1, 2, 3, 4, 5]);
+}
+
+#[test]
+fn test_dedup_strings() {
+    let mut words = vec!["apple", "banana", "apple", "cherry", "banana", "date"];
+    dedup(&mut words);
+    assert_eq!(words, vec!["apple", "banana", "cherry", "date"]);
+}
+
+#[test]
+fn test_dedup_empty_vec() {
+    let mut empty: Vec<i32> = vec![];
+    dedup(&mut empty);
+    assert_eq!(empty, vec![]);
+}
+
+#[test]
+fn test_dedup_all_unique() {
+    let mut unique = vec![1, 2, 3, 4, 5];
+    dedup(&mut unique);
+    assert_eq!(unique, vec![1, 2, 3, 4, 5]);
+}
+
+#[test]
+fn test_dedup_all_same() {
+    let mut same = vec![1, 1, 1, 1, 1];
+    dedup(&mut same);
+    assert_eq!(same, vec![1]);
 }
