@@ -254,3 +254,87 @@ fn test_dedup_all_same() {
     dedup(&mut same);
     assert_eq!(same, vec![1]);
 }
+
+#[test]
+fn test_retain_even_numbers() {
+    let mut numbers = vec![1, 2, 3, 4, 5, 6];
+    retain_if(&mut numbers, |&x| x % 2 == 0);
+    assert_eq!(numbers, vec![2, 4, 6]);
+}
+
+#[test]
+fn test_retain_odd_numbers() {
+    let mut numbers = vec![1, 2, 3, 4, 5, 6];
+    retain_if(&mut numbers, |&x| x % 2 != 0);
+    assert_eq!(numbers, vec![1, 3, 5]);
+}
+
+#[test]
+fn test_retain_all() {
+    let mut numbers = vec![1, 2, 3];
+    retain_if(&mut numbers, |_| true);
+    assert_eq!(numbers, vec![1, 2, 3]);
+}
+
+#[test]
+fn test_retain_none() {
+    let mut numbers = vec![1, 2, 3];
+    retain_if(&mut numbers, |_| false);
+    assert_eq!(numbers, Vec::<i32>::new());
+}
+
+#[test]
+fn test_retain_greater_than_threshold() {
+    let mut numbers = vec![1, 5, 2, 8, 3, 7];
+    let threshold = 4;
+    retain_if(&mut numbers, |&x| x > threshold);
+    assert_eq!(numbers, vec![5, 8, 7]);
+}
+
+#[test]
+fn test_retain_strings_by_length() {
+    let mut strings = vec![
+        String::from("a"),
+        String::from("ab"),
+        String::from("abc"),
+        String::from("abcd"),
+    ];
+    retain_if(&mut strings, |s| s.len() > 2);
+    assert_eq!(strings, vec![String::from("abc"), String::from("abcd")]);
+}
+
+#[test]
+fn test_empty_vector() {
+    let mut empty: Vec<i32> = Vec::new();
+    retain_if(&mut empty, |&x| x > 0);
+    assert_eq!(empty, Vec::<i32>::new());
+}
+
+#[test]
+fn test_retain_custom_struct() {
+    struct Person {
+        name: String,
+        age: u32,
+    }
+
+    let mut people = vec![
+        Person {
+            name: String::from("Alice"),
+            age: 25,
+        },
+        Person {
+            name: String::from("Bob"),
+            age: 30,
+        },
+        Person {
+            name: String::from("Charlie"),
+            age: 35,
+        },
+    ];
+
+    retain_if(&mut people, |p| p.age > 28);
+
+    assert_eq!(people.len(), 2);
+    assert_eq!(people[0].name, "Bob");
+    assert_eq!(people[1].name, "Charlie");
+}

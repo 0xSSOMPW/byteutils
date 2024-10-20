@@ -32,3 +32,25 @@ pub fn dedup<T: Eq + Hash + Copy>(v: &mut Vec<T>) {
     let mut uniques = HashSet::new();
     v.retain(|e| uniques.insert(*e));
 }
+
+/// Retains only the elements specified by the predicate.
+///
+/// In-place variant of `Vec::retain()`. This function will remove all elements
+/// for which the predicate returns `false`, while keeping all elements for which
+/// the predicate returns `true`.
+///
+/// # Arguments
+///
+/// * `v` - A mutable reference to the vector to be filtered
+/// * `predicate` - A closure that takes a reference to an element and returns a boolean
+///
+/// # Examples
+///
+/// ```
+/// let mut numbers = vec![1, 2, 3, 4, 5, 6];
+/// byteutils::vec::retain_if(&mut numbers, |&x| x % 2 == 0);
+/// assert_eq!(numbers, vec![2, 4, 6]);
+/// ```
+pub fn retain_if<T>(v: &mut Vec<T>, predicate: impl Fn(&T) -> bool) {
+    v.retain(predicate);
+}
