@@ -338,3 +338,69 @@ fn test_retain_custom_struct() {
     assert_eq!(people[0].name, "Bob");
     assert_eq!(people[1].name, "Charlie");
 }
+
+#[test]
+fn test_reverse_odd_length_vector() {
+    let mut vec = vec![1, 2, 3, 4, 5];
+    reverse_in_place(&mut vec);
+    assert_eq!(vec, vec![5, 4, 3, 2, 1]);
+}
+
+#[test]
+fn test_reverse_even_length_vector() {
+    let mut vec = vec![1, 2, 3, 4];
+    reverse_in_place(&mut vec);
+    assert_eq!(vec, vec![4, 3, 2, 1]);
+}
+
+#[test]
+fn test_reverse_single_element_vector() {
+    let mut vec = vec![1];
+    reverse_in_place(&mut vec);
+    assert_eq!(vec, vec![1]);
+}
+
+#[test]
+fn test_reverse_empty_vector() {
+    let mut vec: Vec<i32> = vec![];
+    reverse_in_place(&mut vec);
+    assert_eq!(vec, Vec::<i32>::new());
+}
+
+#[test]
+fn test_reverse_string_vector() {
+    let mut vec = vec!["hello".to_string(), "world".to_string()];
+    reverse_in_place(&mut vec);
+    assert_eq!(vec, vec!["world".to_string(), "hello".to_string()]);
+}
+
+#[test]
+fn test_reverse_large_vector() {
+    let mut vec: Vec<i32> = (1..1001).collect();
+    let expected: Vec<i32> = (1..1001).rev().collect();
+    reverse_in_place(&mut vec);
+    assert_eq!(vec, expected);
+}
+
+#[test]
+fn test_reverse_vector_of_vectors() {
+    let mut vec = vec![vec![1, 2], vec![3, 4], vec![5, 6]];
+    reverse_in_place(&mut vec);
+    assert_eq!(vec, vec![vec![5, 6], vec![3, 4], vec![1, 2]]);
+}
+
+#[test]
+fn test_reverse_vector_of_options() {
+    let mut vec = vec![Some(1), None, Some(3)];
+    reverse_in_place(&mut vec);
+    assert_eq!(vec, vec![Some(3), None, Some(1)]);
+}
+
+#[test]
+fn test_reverse_preserves_elements() {
+    let mut vec = vec![1, 2, 3, 4, 5];
+    let original_sum: i32 = vec.iter().sum();
+    reverse_in_place(&mut vec);
+    let reversed_sum: i32 = vec.iter().sum();
+    assert_eq!(original_sum, reversed_sum);
+}

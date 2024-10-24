@@ -54,3 +54,31 @@ pub fn dedup<T: Eq + Hash + Copy>(v: &mut Vec<T>) {
 pub fn retain_if<T>(v: &mut Vec<T>, predicate: impl Fn(&T) -> bool) {
     v.retain(predicate);
 }
+
+/// Reverses the order of elements in the vector in place.
+///
+/// This function modifies the original vector, reversing the order of its elements
+/// without allocating a new vector.
+///
+/// # Arguments
+///
+/// * `v` - A mutable reference to the vector to be reversed
+///
+/// # Examples
+///
+/// ```
+/// let mut vec = vec![1, 2, 3, 4, 5];
+/// byteutils::vec::reverse_in_place(&mut vec);
+/// assert_eq!(vec, vec![5, 4, 3, 2, 1]);
+/// ```
+///
+/// # Note
+///
+/// This function has a time complexity of O(n/2) where n is the length of the vector.
+/// It performs in-place swapping, which is memory-efficient for large vectors.
+pub fn reverse_in_place<T>(v: &mut Vec<T>) {
+    let len = v.len();
+    for i in 0..len / 2 {
+        v.swap(i, len - 1 - i);
+    }
+}
