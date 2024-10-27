@@ -82,3 +82,50 @@ pub fn reverse_in_place<T>(v: &mut Vec<T>) {
         v.swap(i, len - 1 - i);
     }
 }
+
+/// Splits a vector into two at the given index, creating two new vectors.
+///
+/// This function takes a mutable reference to a vector and an index, and returns
+/// two new vectors. The first vector contains cloned elements from the original vector
+/// up to (but not including) the given index, and the second vector contains
+/// cloned elements of the remaining items.
+///
+/// # Type Parameters
+///
+/// * `T` - The type of elements in the vector, which must implement the `Clone` trait
+///
+/// # Arguments
+///
+/// * `v` - A mutable reference to the vector to be split
+/// * `at` - The index at which to split the vector
+///
+/// # Returns
+///
+/// A tuple containing two new vectors: (left, right)
+///
+/// # Panics
+///
+/// This function will panic if `at` is greater than the length of the vector.
+///
+/// # Examples
+///
+/// ```
+/// let mut vec = vec![1, 2, 3, 4, 5];
+/// let (left, right) = byteutils::vec::split_at_vec(&mut vec, 3);
+/// assert_eq!(left, vec![1, 2, 3]);
+/// assert_eq!(right, vec![4, 5]);
+/// ```
+///
+/// # Note
+///
+/// - This function creates new vectors, which means it allocates new memory and clones elements.
+/// - If you only need to work with the split parts without creating new vectors or cloning elements,
+///   consider using the standard library's `split_at` or `split_at_mut` methods instead.
+/// - The original vector `v` is not modified by this operation.
+pub fn split_at_vec<T: Clone>(v: &mut Vec<T>, at: usize) -> (Vec<T>, Vec<T>) {
+    if at > v.len() {
+        panic!("index out of bounds");
+    }
+    let (left, right) = v.split_at_mut(at);
+    (left.to_vec(), right.to_vec())
+}

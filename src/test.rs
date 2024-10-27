@@ -404,3 +404,101 @@ fn test_reverse_preserves_elements() {
     let reversed_sum: i32 = vec.iter().sum();
     assert_eq!(original_sum, reversed_sum);
 }
+
+#[test]
+fn test_split_at_middle() {
+    let mut vec = vec![1, 2, 3, 4, 5];
+    let (left, right) = split_at_vec(&mut vec, 3);
+    assert_eq!(left, vec![1, 2, 3]);
+    assert_eq!(right, vec![4, 5]);
+    assert_eq!(vec, vec![1, 2, 3, 4, 5]); // Original vector unchanged
+}
+
+#[test]
+fn test_split_at_start() {
+    let mut vec = vec![1, 2, 3, 4, 5];
+    let (left, right) = split_at_vec(&mut vec, 0);
+    assert_eq!(left, Vec::<i32>::new());
+    assert_eq!(right, vec![1, 2, 3, 4, 5]);
+}
+
+#[test]
+fn test_split_at_end() {
+    let mut vec = vec![1, 2, 3, 4, 5];
+    let (left, right) = split_at_vec(&mut vec, 5);
+    assert_eq!(left, vec![1, 2, 3, 4, 5]);
+    assert_eq!(right, Vec::<i32>::new());
+}
+
+#[test]
+fn test_split_empty_vector() {
+    let mut vec: Vec<i32> = Vec::new();
+    let (left, right) = split_at_vec(&mut vec, 0);
+    assert_eq!(left, Vec::<i32>::new());
+    assert_eq!(right, Vec::<i32>::new());
+}
+
+#[test]
+fn test_split_string_vector() {
+    let mut vec = vec!["hello".to_string(), "world".to_string(), "rust".to_string()];
+    let (left, right) = split_at_vec(&mut vec, 2);
+    assert_eq!(left, vec!["hello".to_string(), "world".to_string()]);
+    assert_eq!(right, vec!["rust".to_string()]);
+    assert_eq!(
+        vec,
+        vec!["hello".to_string(), "world".to_string(), "rust".to_string()]
+    ); // Original vector unchanged
+}
+
+#[test]
+fn test_split_preserves_elements() {
+    let mut vec = vec![1, 2, 3, 4, 5];
+    let original_sum: i32 = vec.iter().sum();
+    let (left, right) = split_at_vec(&mut vec, 3);
+    let split_sum: i32 = left.iter().sum::<i32>() + right.iter().sum::<i32>();
+    assert_eq!(original_sum, split_sum);
+}
+
+#[test]
+fn test_split_large_vector() {
+    let mut vec: Vec<i32> = (1..1001).collect();
+    let (left, right) = split_at_vec(&mut vec, 500);
+    assert_eq!(left, (1..501).collect::<Vec<i32>>());
+    assert_eq!(right, (501..1001).collect::<Vec<i32>>());
+}
+
+#[test]
+#[should_panic(expected = "index out of bounds")]
+fn test_split_out_of_bounds() {
+    let mut vec = vec![1, 2, 3];
+    split_at_vec(&mut vec, 4); // This should panic
+}
+
+#[test]
+fn test_split_at_length() {
+    let mut vec = vec![1, 2, 3];
+    let (left, right) = split_at_vec(&mut vec, 3); // This should not panic
+    assert_eq!(left, vec![1, 2, 3]);
+    assert_eq!(right, Vec::<i32>::new());
+}
+
+#[test]
+fn test_split_vector_of_options() {
+    let mut vec = vec![Some(1), None, Some(3), None, Some(5)];
+    let (left, right) = split_at_vec(&mut vec, 3);
+    assert_eq!(left, vec![Some(1), None, Some(3)]);
+    assert_eq!(right, vec![None, Some(5)]);
+}
+
+#[test]
+fn test_split_with_non_copy_type() {
+    #[derive(Clone, PartialEq, Debug)]
+    struct NonCopy(i32);
+
+    let mut vec = vec![NonCopy(1), NonCopy(2), NonCopy(3)];
+    let original = vec.clone();
+    let (left, right) = split_at_vec(&mut vec, 2);
+    assert_eq!(left, vec![NonCopy(1), NonCopy(2)]);
+    assert_eq!(right, vec![NonCopy(3)]);
+    assert_eq!(vec, original); // Original vector unchanged
+}
