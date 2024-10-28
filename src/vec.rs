@@ -129,3 +129,70 @@ pub fn split_at_vec<T: Clone>(v: &mut Vec<T>, at: usize) -> (Vec<T>, Vec<T>) {
     let (left, right) = v.split_at_mut(at);
     (left.to_vec(), right.to_vec())
 }
+
+/// Returns a new vector containing only unique elements from the input slice,
+/// preserving the order of their first occurrence.
+///
+/// This function takes a slice of elements and returns a new vector containing
+/// only the unique elements, maintaining the order in which they first appeared
+/// in the original slice.
+///
+/// # Type Parameters
+///
+/// * `T` - The type of elements in the slice, which must implement `Clone`, `Eq`, and `Hash` traits.
+///
+/// # Arguments
+///
+/// * `input` - A slice of elements to be processed.
+///
+/// # Returns
+///
+/// A new `Vec<T>` containing only the unique elements from the input slice.
+///
+/// # Performance
+///
+/// - Time complexity: O(n), where n is the length of the input slice.
+/// - Space complexity: O(n) for storing both the result and the hash set.
+///
+/// # Examples
+///
+/// Basic usage with integers:
+/// ```
+/// let numbers = vec![1, 2, 2, 3, 1, 4];
+/// let unique = byteutils::vec::get_unique(&numbers);
+/// assert_eq!(unique, vec![1, 2, 3, 4]);
+/// ```
+///
+/// Using with strings:
+/// ```
+/// let words = vec!["apple", "banana", "apple", "cherry"];
+/// let unique = byteutils::vec::get_unique(&words);
+/// assert_eq!(unique, vec!["apple", "banana", "cherry"]);
+/// ```
+///
+/// Empty input:
+/// ```
+/// let empty: Vec<i32> = vec![];
+/// let unique = byteutils::vec::get_unique(&empty);
+/// assert_eq!(unique, Vec::<i32>::new());
+/// ```
+///
+/// # Note
+///
+/// - This function creates a new vector and clones elements, which means it allocates new memory.
+/// - The implementation uses a HashSet internally for O(1) lookups while preserving order.
+/// - The original slice is not modified by this operation.
+/// - Compared to the O(n²) version using Vec::contains, this implementation is much more efficient
+///   for large inputs, though it requires elements to implement the Hash trait.
+pub fn get_unique<T: Clone + Eq + std::hash::Hash>(input: &[T]) -> Vec<T> {
+    let mut seen = HashSet::with_capacity(input.len());
+    let mut result = Vec::with_capacity(input.len());
+
+    for item in input {
+        if seen.insert(item) {
+            result.push(item.clone());
+        }
+    }
+
+    result
+}

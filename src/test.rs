@@ -502,3 +502,55 @@ fn test_split_with_non_copy_type() {
     assert_eq!(right, vec![NonCopy(3)]);
     assert_eq!(vec, original); // Original vector unchanged
 }
+
+#[test]
+fn test_empty_vec() {
+    let input: Vec<i32> = vec![];
+    assert_eq!(get_unique(&input), vec![]);
+}
+
+#[test]
+fn test_no_duplicates() {
+    let input = vec![1, 2, 3, 4];
+    assert_eq!(get_unique(&input), vec![1, 2, 3, 4]);
+}
+
+#[test]
+fn test_all_duplicates() {
+    let input = vec![1, 1, 1, 1];
+    assert_eq!(get_unique(&input), vec![1]);
+}
+
+#[test]
+fn test_mixed_duplicates() {
+    let input = vec![1, 2, 2, 3, 1, 4, 3, 5];
+    assert_eq!(get_unique(&input), vec![1, 2, 3, 4, 5]);
+}
+
+#[test]
+fn test_with_strings() {
+    let input = vec!["a", "b", "a", "c", "b"];
+    assert_eq!(get_unique(&input), vec!["a", "b", "c"]);
+}
+
+#[test]
+fn test_preserves_order() {
+    let input = vec![3, 1, 2, 1, 3, 2];
+    assert_eq!(get_unique(&input), vec![3, 1, 2]);
+}
+
+#[test]
+fn test_with_custom_type() {
+    #[derive(Debug, Clone, PartialEq, Eq, Hash)]
+    struct TestStruct(i32);
+
+    let input = vec![TestStruct(1), TestStruct(2), TestStruct(1)];
+    assert_eq!(get_unique(&input), vec![TestStruct(1), TestStruct(2)]);
+}
+
+#[test]
+fn test_large_input() {
+    let input: Vec<i32> = (0..1000).chain(0..1000).collect();
+    let expected: Vec<i32> = (0..1000).collect();
+    assert_eq!(get_unique(&input), expected);
+}
