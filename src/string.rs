@@ -131,3 +131,42 @@ pub fn is_contain_word(src: &str, word: &str) -> bool {
 pub fn has_contain_words(src: &str, words: &[String]) -> bool {
     words.iter().any(|word| is_contain_word(src, word))
 }
+
+/// Replaces placeholders in a string with specified replacement values.
+///
+/// This function takes a string containing placeholders in the format `{{placeholder}}` and
+/// replaces them with the specified replacement value. It uses regex pattern matching to
+/// find and replace all occurrences of the placeholder.
+///
+/// # Arguments
+///
+/// * `input` - A string slice that contains the text with placeholders
+/// * `placeholder` - A string slice representing the placeholder name (without braces)
+/// * `replacement` - A string slice containing the value to replace the placeholder with
+///
+/// # Returns
+///
+/// Returns a new String with all occurrences of the placeholder replaced with the replacement value.
+///
+/// # Examples
+///
+/// ```rust
+/// let template = "Hello {{name}}! Welcome to {{place}}.";
+/// let result = byteutils::string::replace_placeholder(template, "name", "John");
+/// assert_eq!(result, "Hello John! Welcome to {{place}}.");
+/// ```
+///
+/// # Panics
+///
+/// This function will panic if the regex pattern creation fails, which should only happen
+/// if the placeholder contains characters that make an invalid regex pattern.
+pub fn replace_placeholder(input: &str, placeholder: &str, replacement: &str) -> String {
+    // Create a regex pattern that matches {{placeholder}} exactly
+    let pattern = format!(r"\{{\{{{}}}\}}", regex::escape(placeholder));
+
+    // Compile the regex pattern - using unwrap is safe here because we control the pattern format
+    let re = Regex::new(&pattern).expect("Failed to create regex pattern");
+
+    // Replace all occurrences and return the result
+    re.replace_all(input, replacement).into_owned()
+}

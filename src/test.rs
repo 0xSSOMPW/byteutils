@@ -221,6 +221,55 @@ fn test_has_contain_words() {
 }
 
 #[test]
+fn test_basic_replacement() {
+    let input = "Hello {{name}}!";
+    let result = replace_placeholder(input, "name", "World");
+    assert_eq!(result, "Hello World!");
+}
+
+#[test]
+fn test_multiple_occurrences() {
+    let input = "{{greeting}} {{name}}! How are you, {{name}}?";
+    let result = replace_placeholder(input, "name", "Alice");
+    assert_eq!(result, "{{greeting}} Alice! How are you, Alice?");
+}
+
+#[test]
+fn test_no_placeholder_present() {
+    let input = "Hello World!";
+    let result = replace_placeholder(input, "name", "Alice");
+    assert_eq!(result, "Hello World!");
+}
+
+#[test]
+fn test_special_characters_in_replacement() {
+    let input = "Hello {{name}}!";
+    let result = replace_placeholder(input, "name", "$&*");
+    assert_eq!(result, "Hello $&*!");
+}
+
+#[test]
+fn test_empty_replacement() {
+    let input = "Hello {{name}}!";
+    let result = replace_placeholder(input, "name", "");
+    assert_eq!(result, "Hello !");
+}
+
+#[test]
+fn test_placeholder_with_spaces() {
+    let input = "Hello {{user name}}!";
+    let result = replace_placeholder(input, "user name", "John Doe");
+    assert_eq!(result, "Hello John Doe!");
+}
+
+#[test]
+fn test_nested_placeholders() {
+    let input = "Hello {{outer{{inner}}}}!";
+    let result = replace_placeholder(input, "outer{{inner}}", "World");
+    assert_eq!(result, "Hello World!");
+}
+
+#[test]
 fn test_dedup_integers() {
     let mut numbers = vec![1, 2, 3, 2, 4, 1, 5];
     dedup(&mut numbers);
