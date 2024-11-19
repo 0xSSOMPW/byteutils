@@ -1,3 +1,5 @@
+use std::collections::HashMap;
+
 use crate::string::*;
 use crate::vec::*;
 #[cfg(test)]
@@ -267,6 +269,83 @@ fn test_nested_placeholders() {
     let input = "Hello {{outer{{inner}}}}!";
     let result = replace_placeholder(input, "outer{{inner}}", "World");
     assert_eq!(result, "Hello World!");
+}
+
+fn create_test_map() -> HashMap<String, String> {
+    let mut map = HashMap::new();
+    map.insert("name".to_string(), "John".to_string());
+    map.insert("age".to_string(), "30".to_string());
+    map.insert("city".to_string(), "New York".to_string());
+    map
+}
+
+#[test]
+fn test_multiple_replacements() {
+    let template = "{{name}} is {{age}} years old and lives in {{city}}.";
+    let replacements = create_test_map();
+    let result = replace_multiple_placeholders(template, &replacements);
+    assert_eq!(result, "John is 30 years old and lives in New York.");
+}
+
+#[test]
+fn test_repeated_placeholders() {
+    let template = "{{name}} {{name}} {{name}}";
+    let replacements = create_test_map();
+    let result = replace_multiple_placeholders(template, &replacements);
+    assert_eq!(result, "John John John");
+}
+
+#[test]
+fn test_missing_placeholder() {
+    let template = "{{name}} is {{age}} years old and works as {{job}}.";
+    let replacements = create_test_map();
+    let result = replace_multiple_placeholders(template, &replacements);
+    assert_eq!(result, "John is 30 years old and works as {{job}}.");
+}
+
+#[test]
+fn test_empty_template() {
+    let template = "";
+    let replacements = create_test_map();
+    let result = replace_multiple_placeholders(template, &replacements);
+    assert_eq!(result, "");
+}
+
+#[test]
+fn test_empty_map() {
+    let template = "Hello {{name}}!";
+    let replacements = HashMap::new();
+    let result = replace_multiple_placeholders(template, &replacements);
+    assert_eq!(result, "Hello {{name}}!");
+}
+
+#[test]
+fn test_special_characters() {
+    let mut replacements = HashMap::new();
+    replacements.insert("special".to_string(), "$&*^%".to_string());
+    let template = "Special chars: {{special}}";
+    let result = replace_multiple_placeholders(template, &replacements);
+    assert_eq!(result, "Special chars: $&*^%");
+}
+
+#[test]
+fn test_nested_replacement() {
+    let mut replacements = HashMap::new();
+    replacements.insert("outer".to_string(), "{{inner}}".to_string());
+    replacements.insert("inner".to_string(), "value".to_string());
+    let template = "Nested: {{outer}}";
+    let result = replace_multiple_placeholders(template, &replacements);
+    assert_eq!(result, "Nested: value");
+}
+
+#[test]
+fn test_unicode_characters() {
+    let mut replacements = HashMap::new();
+    replacements.insert("greeting".to_string(), "你好".to_string());
+    replacements.insert("name".to_string(), "José".to_string());
+    let template = "{{greeting}}, {{name}}!";
+    let result = replace_multiple_placeholders(template, &replacements);
+    assert_eq!(result, "你好, José!");
 }
 
 #[test]

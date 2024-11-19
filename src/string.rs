@@ -1,3 +1,5 @@
+use std::collections::HashMap;
+
 use regex::Regex;
 
 /// Converts a comma-separated string into a vector of strings.
@@ -169,4 +171,47 @@ pub fn replace_placeholder(input: &str, placeholder: &str, replacement: &str) ->
 
     // Replace all occurrences and return the result
     re.replace_all(input, replacement).into_owned()
+}
+
+/// Replaces multiple placeholders in a string using a map of placeholder-value pairs.
+///
+/// This function processes a template string containing multiple placeholders in the format
+/// `{{placeholder}}` and replaces each one with its corresponding value from the provided map.
+/// If a placeholder in the template doesn't have a corresponding entry in the map, it remains
+/// unchanged in the output string.
+///
+/// # Arguments
+///
+/// * `template` - A string slice containing the template text with placeholders
+/// * `replacements` - A HashMap where keys are placeholder names and values are their replacements
+///
+/// # Returns
+///
+/// Returns a new String with all matched placeholders replaced with their corresponding values.
+///
+/// # Examples
+///
+/// ```rust
+/// use std::collections::HashMap;
+///
+/// let mut replacements = HashMap::new();
+/// replacements.insert("name".to_string(), "John".to_string());
+/// replacements.insert("age".to_string(), "30".to_string());
+///
+/// let template = "Hello {{name}}! You are {{age}} years old.";
+/// let result = byteutils::string::replace_multiple_placeholders(template, &replacements);
+/// assert_eq!(result, "Hello John! You are 30 years old.");
+/// ```
+pub fn replace_multiple_placeholders(
+    template: &str,
+    replacements: &HashMap<String, String>,
+) -> String {
+    let mut result = template.to_string();
+
+    // Iterate through each placeholder-value pair and apply replacements
+    for (placeholder, value) in replacements {
+        result = replace_placeholder(&result, placeholder, value);
+    }
+
+    result
 }
