@@ -2,6 +2,19 @@
 name = "byteutils"
 version = "0.1.0"
 edition = "2021"
+categories = ["encoding", "text-processing", "data-structures", "algorithms", "development-tools::build-utils"]
+description = "Rust library that provides a collection of frequently used utility functions for working with bytes, strings, and vectors. It includes common tasks such as converting between strings and byte arrays, manipulating strings, and performing common operations on vectors."
+documentation = "https://github.com/0xSSOMPW/byteutils/blob/master/README.md"
+readme = "README.md"
+authors = ["falcon71181"]
+keywords = ["utils", "string", "byte", "vec", "library"]
+repository = "https://github.com/0xSSOMPW/byteutils"
+license = "MIT"
+license-file = "LICENSE"
+
+[lib]
+name = "byteutils"           # The name of the target.
+path = "src/lib.rs"    # The source file of the target.
 
 [dependencies]
 regex = "1.11.0"
